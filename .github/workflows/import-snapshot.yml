@@ -38,7 +38,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           rm -rf .import
-          rm -f .github/workflows/import-snapshot.yml
+          rm -f .github/workflows/ci.yml
           git add -A
-          git commit -m "feat: publish complete XGO-Duck Life AI V3.3 source"
+          git commit -m "feat: publish complete XGO-Duck Life AI V3.3 source [skip ci]"
           git push
