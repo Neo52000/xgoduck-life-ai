@@ -9,8 +9,8 @@ services:
       MCP_SERVER_URL: http://127.0.0.1:18765/mcp
       HEALTH_LISTEN_ADDR: 127.0.0.1:18766
       LOG_LEVEL: info
+    # The official image already launches 'tunnel-client run'.
     command:
-      - run
       - --control-plane.api-key=file:/run/secrets/runtime_key
     secrets:
       - runtime_key
