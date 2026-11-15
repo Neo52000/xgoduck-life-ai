@@ -1,0 +1,25 @@
+# Requires eligible OpenAI tunnel ID and runtime credentials; no inbound ports.
+services:
+  openai_tunnel_client:
+    image: ghcr.io/openai/tunnel-client:v0.0.21
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      CONTROL_PLANE_TUNNEL_ID: ${CONTROL_PLANE_TUNNEL_ID:?Set provisioned tunnel ID}
+      MCP_SERVER_URL: http://127.0.0.1:18765/mcp
+      HEALTH_LISTEN_ADDR: 127.0.0.1:18766
+      LOG_LEVEL: info
+    command:
+      - run
+      - --control-plane.api-key=file:/run/secrets/runtime_key
+    secrets:
+      - runtime_key
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 256m
+secrets:
+  runtime_key:
+    file: /etc/xgoduck-tunnel/runtime.key
