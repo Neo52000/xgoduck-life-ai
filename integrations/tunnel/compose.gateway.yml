@@ -1,0 +1,17 @@
+# Separate from main Life AI compose.yml. Ports are bound to host loopback only.
+services:
+  lifeai_mcp_gateway:
+    build:
+      context: ../..
+      dockerfile: integrations/tunnel/Dockerfile
+    restart: unless-stopped
+    network_mode: host
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 256m
