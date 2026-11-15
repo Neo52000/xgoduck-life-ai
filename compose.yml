@@ -1,0 +1,46 @@
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lifeai
+      POSTGRES_USER: lifeai
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Définir DB_PASSWORD dans .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deploy/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lifeai -d lifeai"]
+      interval: 10s
+      timeout: 5s
+      retries: 8
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://lifeai:${DB_PASSWORD:?Définir DB_PASSWORD dans .env}@db:5432/lifeai
+      DATA_DIR: /data
+      ADMIN_USER: ${ADMIN_USER:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Définir ADMIN_PASSWORD dans .env}
+      ROBOT_API_KEY: ${ROBOT_API_KEY:?Définir ROBOT_API_KEY dans .env}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      VISION_MODEL: ${VISION_MODEL:-gpt-4.1-mini}
+      AUTO_VISION: ${AUTO_VISION:-false}
+      REMOTE_REFERENCE_MATCHING: ${REMOTE_REFERENCE_MATCHING:-false}
+      MAX_REFERENCE_IMAGES: ${MAX_REFERENCE_IMAGES:-8}
+      MAX_AI_CALLS_PER_DAY: ${MAX_AI_CALLS_PER_DAY:-20}
+      ALLOW_WIKIPEDIA: ${ALLOW_WIKIPEDIA:-true}
+      MAX_RESEARCH_PER_CYCLE: ${MAX_RESEARCH_PER_CYCLE:-2}
+      LIFEAI_CODE_REVISION: ${LIFEAI_CODE_REVISION:-lifeai-3.3.0}
+    volumes:
+      - media_data:/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  postgres_data:
+  media_data:

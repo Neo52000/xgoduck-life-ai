@@ -1,0 +1,34 @@
+# Secrets and environment overrides
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Runtime data: never commit private memories or camera images
+data/
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+backups/
+*.bak
+review_candidates/
+lifeai-review-candidates/
+
+# Python and tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local editor/system files
+.DS_Store
+.idea/
+.vscode/

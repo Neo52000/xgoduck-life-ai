@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101c29">
+  <title>Life AI V3.3 — Le second cerveau de Duck</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="topbar"><div class="brand"><div class="logo">D<span>·</span></div><div><strong>LIFE AI <small>V3.3</small></strong><span>SECOND CERVEAU · XGO-DUCK</span></div></div><div class="topright"><span id="engine-status" class="connection">Chargement…</span><button class="secondary compact" id="refresh">Actualiser</button></div></header>
+<main>
+<section class="heading"><div><div class="eyebrow">TABLEAU DE BORD COGNITIF</div><h1>Duck apprend à connaître le monde.</h1><p>Présente-lui des images. Confirme ses découvertes. Sa mémoire s'enrichit à chaque expérience.</p></div><div class="live-indicator"><span class="pulse"></span> SERVEUR ACTIF</div></section>
+<section class="stats" id="stats"><div class="stat"><div class="stat-icon">◈</div><strong id="stat-concepts">—</strong><span>Objets appris</span></div><div class="stat"><div class="stat-icon">▣</div><strong id="stat-observations">—</strong><span>Observations</span></div><div class="stat"><div class="stat-icon">?</div><strong id="stat-pending">—</strong><span>À confirmer</span></div><div class="stat"><div class="stat-icon">✳</div><strong id="stat-facts">—</strong><span>Connaissances vérifiées</span></div></section>
+<section class="two-cols">
+ <article class="panel upload-panel"><div class="panelhead"><div><div class="eyebrow">01 / PERCEPTION</div><h2>Nouvelle observation</h2></div><span class="pill">SANS ROBOT REQUIS</span></div>
+   <form id="upload-form"><label class="dropzone" id="dropzone" for="image"><input id="image" type="file" accept="image/jpeg,image/png,image/webp" required><div class="camera-icon">◎</div><strong>Choisir une photo ou la déposer ici</strong><span>JPG · PNG · WEBP — 5 Mo maximum</span><img id="preview" hidden alt="Aperçu de la photographie"></label><div class="formline"><button class="primary" type="submit" id="upload-button">Analyser l'observation <span>→</span></button></div></form>
+   <p class="hint">Par défaut, les photos restent sur le serveur. Le rapprochement d'images sous différents angles nécessite une IA externe, une activation explicite et une confirmation humaine. Les exemples de référence sont alors aussi envoyés au fournisseur IA.</p>
+ </article>
+ <article class="panel mind-panel"><div class="panelhead"><div><div class="eyebrow">02 / MÉMOIRE</div><h2>Comment Duck apprend</h2></div></div>
+   <div class="mindstep"><span class="number">01</span><div><strong>Observer</strong><p>La photo est enregistrée localement, sans ses métadonnées EXIF.</p></div></div>
+   <div class="mindstep"><span class="number">02</span><div><strong>Comparer</strong><p>Duck cherche d’abord les images presque identiques ; une IA optionnelle compare ensuite différents angles avec les exemples confirmés.</p></div></div>
+   <div class="mindstep"><span class="number">03</span><div><strong>Proposer</strong><p>Si nécessaire, l'IA suggère un objet, sans le déclarer certain.</p></div></div>
+   <div class="mindstep"><span class="number">04</span><div><strong>Apprendre</strong><p>Tu confirmes le nom : il conserve cet exemple et le réutilise.</p></div></div>
+ </article>
+</section>
+<section class="panel margin-top"><div class="panelhead"><div><div class="eyebrow">03 / JOURNAL DES DÉCOUVERTES</div><h2>Observations récentes</h2></div><span class="subtle">Les propositions d'IA sont à vérifier</span></div><div id="observations" class="obs-grid"><p class="empty">Aucune observation. Ajoute une première image.</p></div></section>
+<section class="two-cols margin-top">
+ <article class="panel"><div class="panelhead"><div><div class="eyebrow">04 / CONNAISSANCES</div><h2>Objets mémorisés</h2></div><a href="/api/export" class="small-link">Exporter JSON</a></div><div id="concepts" class="rows"><p class="empty">La mémoire est encore vide.</p></div></article>
+ <article class="panel"><div class="panelhead"><div><div class="eyebrow">05 / CURIOSITÉ</div><h2>Ce qu'il reste à apprendre</h2></div><button class="secondary compact" type="button" id="curiosity-cycle">Lancer un cycle de recherche</button></div><div id="curiosity" class="rows"><p class="empty">Aucune tâche.</p></div><div class="panelhead little-top"><div><div class="eyebrow">JOURNAL</div><h2>Activité récente</h2></div></div><div id="events" class="events"></div></article>
+</section>
+<section class="panel margin-top"><div class="panelhead"><div><div class="eyebrow">06 / PROGRESSION</div><h2>Mesures de l’apprentissage</h2></div><a href="/api/robot/knowledge" class="small-link">Mémoire robot (JSON)</a></div><div class="rows" id="learning-report"><p class="empty">Calcul des indicateurs…</p></div></section>
+<section class="panel margin-top evolution-panel" id="evolution-section">
+ <div class="panelhead"><div><div class="eyebrow">07 / SELF-EVOLUTION</div><h2>Amélioration du cerveau — mode supervisé</h2></div><span class="pill">AUCUN AUTO-DÉPLOIEMENT</span></div>
+ <p class="subtle">Duck analyse ses erreurs et prépare des propositions. Tu décides si un agent développeur peut les étudier. Aucune proposition ne modifie la production.</p>
+ <div class="evolution-metrics" id="evolution-metrics"><div class="evo-metric"><strong>—</strong><span>Corrections humaines (30 j)</span></div><div class="evo-metric"><strong>—</strong><span>Observations inconnues</span></div><div class="evo-metric"><strong>—</strong><span>Propositions à examiner</span></div></div>
+ <div class="evo-actions"><button type="button" class="primary" id="run-diagnosis">Lancer un diagnostic</button><span class="subtle" id="diagnosis-status">Aucun diagnostic réalisé.</span></div>
+ <div id="evolution-proposals" class="evo-list"><p class="empty">Les propositions apparaîtront après le premier diagnostic.</p></div>
+ <p class="hint">Le diagnostic est limité à une exécution par jour UTC. L'agent développeur est une commande locale facultative, déclenchée explicitement hors production. Chaque correctif doit être revu puis testé en CI avant une éventuelle intégration.</p>
+</section>
+<section class="panel margin-top evolution-panel" id="continuous-section">
+ <div class="panelhead"><div><div class="eyebrow">08 / V3.3 — ÉVOLUTION CONTINUE</div><h2>Historique, tests visuels et dossiers de version</h2></div><span class="pill">VALIDATION HUMAINE</span></div>
+ <p class="subtle">Un cycle par jour : diagnostic, photographie des métriques et test visuel sur des vues confirmées distinctes. Un progrès ne peut être affirmé que sur un jeu de tests inchangé.</p>
+ <div class="evolution-metrics" id="continuous-metrics"><p class="empty">Aucun cycle enregistré.</p></div>
+ <div class="evo-actions"><button type="button" class="primary" id="run-continuous">Lancer le cycle V3.3</button><span class="subtle" id="continuous-status">Non exécuté</span></div>
+ <div class="panelhead little-top"><div><div class="eyebrow">HISTORIQUE</div><h2>Derniers relevés</h2></div></div>
+ <div id="continuous-cycles" class="evo-list"><p class="empty">Premiers relevés à venir.</p></div>
+ <div class="panelhead little-top"><div><div class="eyebrow">SÉCURITÉ DE MISE À JOUR</div><h2>Dossiers comparatifs</h2></div></div>
+ <div id="continuous-releases" class="evo-list"><p class="empty">Aucun dossier de version.</p></div>
+ <details class="release-details"><summary>Créer un dossier de comparaison (avancé)</summary>
+ <p class="hint">À utiliser uniquement avec deux révisions testées sur les mêmes photographies et un compte rendu CI réel. Les chiffres sont déclaratifs : le serveur ne vérifie pas cryptographiquement le fournisseur CI.</p>
+ <form id="release-assessment-form" class="release-form">
+ <label>Proposition autorisée<select id="release-proposal" required></select></label>
+ <label>Cycle de référence<select id="release-baseline" required></select></label>
+ <label>Cycle candidat<select id="release-candidate" required></select></label>
+ <label>Tests CI au total<input type="number" id="release-tests-total" min="1" max="20000" required></label>
+ <label>Tests CI réussis<input type="number" id="release-tests-passed" min="0" max="20000" required></label>
+ <label>SHA-256 du rapport CI<input type="text" id="release-ci-sha" minlength="64" maxlength="64" pattern="[A-Fa-f0-9]{64}" placeholder="64 caractères hexadécimaux" required></label>
+ <label><input id="release-security" type="checkbox"> Revue de sécurité effectuée</label>
+ <label><input id="release-rollback" type="checkbox"> Plan de retour arrière préparé</label>
+ <button type="submit" class="secondary">Évaluer le dossier</button>
+ </form></details>
+ <p class="hint">Aucune mise à jour, fusion GitHub, exécution de correctif ou commande moteur n'est automatique. Une validation ne fait qu'autoriser une préparation manuelle externe au serveur.</p>
+</section>
+</main>
+<footer>Life AI · Projet XGO-Duck Evolution · Pas de commande moteur · Mémoire contrôlée par l'utilisateur</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="confirm-dialog"><form id="confirm-form"><div class="eyebrow">APPRENTISSAGE HUMAIN</div><h2>Confirmer cette découverte</h2><p id="confirm-hint" class="subtle">Quel est l'objet sur cette image ?</p><label>Nom de l'objet<input name="label" id="label" placeholder="Ex. : agrafeuse" required maxlength="120"></label><label>Catégorie<input name="category" id="category" value="objet" maxlength="80"></label><label>Ce qu'il faut retenir<textarea name="description" id="description" rows="3" maxlength="1000" placeholder="Description facultative"></textarea></label><div class="dialogactions"><button type="button" class="secondary" id="cancel-dialog">Annuler</button><button class="primary" type="submit">Confirmer l'apprentissage</button></div></form></dialog>
+<script src="/assets/app.js" defer></script>
+</body></html>
